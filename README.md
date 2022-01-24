@@ -1,3 +1,2 @@
 # Tetris
-
-Later on it will be published on GitHub Pages.
+Play at https://batin-cetin.github.io/Tetris/
