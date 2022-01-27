@@ -21,3 +21,8 @@ var rotate_sound = new Audio('rotate.mp3');
 function play_rotate_sound(){
     rotate_sound.play();
 }
+
+var game_over_sound = new Audio('game_over.mp3');
+function play_game_over_sound(){
+    game_over_sound.play();
+}

@@ -12,9 +12,14 @@ for(var row=0; row<20; row++){
         square.style.height="20px";
         square.style.textAlign="center";
         square.style.backgroundColor = "black";
-		square.style.fontSize = 0;
+		square.style.fontSize = "0px";
 		square.innerHTML = ' ';
 		square.style.color = "white";
+
+		if (row>=8 && row<=11 && col>=1 && col<=8){
+			if (row != 8 || col != 1) square.className = 'middle';
+		}
+
 		line.appendChild(square);
 	}
 	table.appendChild(line);

@@ -3,45 +3,80 @@ var all_pieces = ['I', 'O', 'S', 'Z', 'L', 'J', 'T'];
 var score = 0;
 
 var current_piece = null;
+var just_spawned = true;
 function spawn_piece(){
-    current_piece_type = all_pieces[Math.floor(Math.random() * 7)];
-    switch(current_piece_type){
-        case 'I': current_piece = new I_piece(); break;
-        case 'O': current_piece = new O_piece(); break;
-        case 'S': current_piece = new S_piece(); break;
-        case 'Z': current_piece = new Z_piece(); break;
-        case 'L': current_piece = new L_piece(); break;
-        case 'J': current_piece = new J_piece(); break;
-        case 'T': current_piece = new T_piece(); break;
-    }
+    just_spawned = true;
+    if (!game_ended){
+        current_piece_type = all_pieces[Math.floor(Math.random() * 7)];
+        switch(current_piece_type){
+            case 'I': current_piece = new I_piece(); break;
+            case 'O': current_piece = new O_piece(); break;
+            case 'S': current_piece = new S_piece(); break;
+            case 'Z': current_piece = new Z_piece(); break;
+            case 'L': current_piece = new L_piece(); break;
+            case 'J': current_piece = new J_piece(); break;
+            case 'T': current_piece = new T_piece(); break;
+        }
     draw_piece("full");
+    }
 }
 spawn_piece();
 
 function draw_piece(fullness){
     var x = current_piece.x;
     var y = current_piece.y;
-    var current_shape = current_piece.shape;
-    for(var i = 0; i<current_shape.length; i++){
-        for(var j=0; j<current_shape[0].length; j++){
-            if (!(y+i >= 20 || x+j < 0 || x+j >= 10)){
-                if (game_grid.rows[y+i].cells[x+j].innerHTML === 'D') continue;
-            }
-            if (fullness === "full"){
-                if (current_shape[i][j] === ' ') continue;
-                else {
-                    game_grid.rows[y+i].cells[x+j].innerHTML = current_shape[i][j];
-                    game_grid.rows[y+i].cells[x+j].style.backgroundColor = current_piece.color;
-                }
-            } else if (fullness === "empty") {
-                if (y+i > 19 || x+j < 0 || x+j > 9) continue; 
-                else {
-                    game_grid.rows[y+i].cells[x+j].innerHTML = ' ';
-                    game_grid.rows[y+i].cells[x+j].style.backgroundColor = "black";
-                }
-            } else throw "That fullness doesn't exist!";
-        }
+    if ((just_spawned && collision(x, y)) && !game_ended){
+        end_game();
     }
+    if (!game_ended){
+        var current_shape = current_piece.shape;
+        for(var i = 0; i<current_shape.length; i++){
+            for(var j=0; j<current_shape[0].length; j++){
+                if (!(y+i >= 20 || x+j < 0 || x+j >= 10)){
+                    if (game_grid.rows[y+i].cells[x+j].innerHTML === 'D') continue;
+                }
+                if (fullness === "full"){
+                    if (current_shape[i][j] === ' ') continue;
+                    else {
+                        game_grid.rows[y+i].cells[x+j].innerHTML = current_shape[i][j];
+                        game_grid.rows[y+i].cells[x+j].style.backgroundColor = current_piece.color;
+                    }
+                } else if (fullness === "empty") {
+                    if (y+i > 19 || x+j < 0 || x+j > 9) continue; 
+                    else {
+                        game_grid.rows[y+i].cells[x+j].innerHTML = ' ';
+                        game_grid.rows[y+i].cells[x+j].style.backgroundColor = "black";
+                    }
+                } else throw "That fullness doesn't exist!";
+            }
+        }
+        just_spawned = false;
+    }    
+}
+
+var game_ended = false;
+function end_game(){
+    game_ended = true;
+    tetris_theme.pause();
+    tetris_theme.currentTime = 0;
+    merge_middle();
+    play_game_over_sound();
+}
+
+function merge_middle(){
+    var cells_will_be_removed = document.getElementsByClassName('middle');
+    var end_point = cells_will_be_removed.length;
+    for(var i=0; i<end_point; i++){
+        cells_will_be_removed[0].remove();
+    }
+    var new_middle = game_grid.rows[8].cells[1];
+    new_middle.setAttribute('colspan', 8);
+    new_middle.setAttribute('rowspan', 4);
+    new_middle.style.backgroundColor = "#303030";
+    new_middle.style.fontSize = "25px";
+    new_middle.style.textAlign= "center";
+    new_middle.innerHTML = "Game Over!";
+    new_middle.style.color = "white";
 }
 
 var collision_history = [];
@@ -166,8 +201,10 @@ document.onkeydown = function (event) {
  };
 
 setInterval(function() { 
-    move("down");
-    put_piece_interval();
+    if (!game_ended){
+        move("down");
+        put_piece_interval();
+    }
 }, 800);
 
 function put_piece_interval(){
