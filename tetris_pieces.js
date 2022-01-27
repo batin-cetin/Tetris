@@ -86,7 +86,7 @@ class T_piece{
     constructor(){
         this.x = 3;
         this.y = 0;
-        this.shape = [[' ', ' ', ' '], ['T', 'T', 'T'], [' ', 'T', ' ']];
+        this.shape = [['T', 'T', 'T'], [' ', 'T', ' '], [' ', ' ', ' ']];
         this.color = "purple";
     }
     rotate(){

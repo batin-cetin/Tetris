@@ -17,8 +17,8 @@ function spawn_piece(){
             case 'J': current_piece = new J_piece(); break;
             case 'T': current_piece = new T_piece(); break;
         }
-    draw_piece("full");
     }
+    draw_piece("full");
 }
 spawn_piece();
 
@@ -28,30 +28,28 @@ function draw_piece(fullness){
     if ((just_spawned && collision(x, y)) && !game_ended){
         end_game();
     }
-    if (!game_ended){
-        var current_shape = current_piece.shape;
-        for(var i = 0; i<current_shape.length; i++){
-            for(var j=0; j<current_shape[0].length; j++){
-                if (!(y+i >= 20 || x+j < 0 || x+j >= 10)){
-                    if (game_grid.rows[y+i].cells[x+j].innerHTML === 'D') continue;
-                }
-                if (fullness === "full"){
-                    if (current_shape[i][j] === ' ') continue;
-                    else {
-                        game_grid.rows[y+i].cells[x+j].innerHTML = current_shape[i][j];
-                        game_grid.rows[y+i].cells[x+j].style.backgroundColor = current_piece.color;
-                    }
-                } else if (fullness === "empty") {
-                    if (y+i > 19 || x+j < 0 || x+j > 9) continue; 
-                    else {
-                        game_grid.rows[y+i].cells[x+j].innerHTML = ' ';
-                        game_grid.rows[y+i].cells[x+j].style.backgroundColor = "black";
-                    }
-                } else throw "That fullness doesn't exist!";
+    var current_shape = current_piece.shape;
+    for(var i = 0; i<current_shape.length; i++){
+        for(var j=0; j<current_shape[0].length; j++){
+            if (!(y+i >= 20 || x+j < 0 || x+j >= 10)){
+                if (game_grid.rows[y+i].cells[x+j].innerHTML === 'D') continue;
             }
+            if (fullness === "full"){
+                if (current_shape[i][j] === ' ') continue;
+                else {
+                    game_grid.rows[y+i].cells[x+j].innerHTML = current_shape[i][j];
+                    game_grid.rows[y+i].cells[x+j].style.backgroundColor = current_piece.color;
+                }
+            } else if (fullness === "empty") {
+                if (y+i > 19 || x+j < 0 || x+j > 9) continue; 
+                else {
+                    game_grid.rows[y+i].cells[x+j].innerHTML = ' ';
+                    game_grid.rows[y+i].cells[x+j].style.backgroundColor = "black";
+                }
+            } else throw "That fullness doesn't exist!";
         }
-        just_spawned = false;
-    }    
+    }
+    just_spawned = false;
 }
 
 var game_ended = false;
