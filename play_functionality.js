@@ -1,5 +1,6 @@
 var game_grid = document.getElementById("tetris-grid");
 var all_pieces = ['I', 'O', 'S', 'Z', 'L', 'J', 'T'];
+var score = 0;
 
 var current_piece = null;
 function spawn_piece(){
@@ -93,7 +94,11 @@ function clear_lines(){
         if (include_line) lines_to_remove.push(i);
     }
     line_count = lines_to_remove.length;
-    if (line_count > 0) play_line_remove_sound();
+    if (line_count > 0) {
+        play_line_remove_sound();
+        score += line_count
+        document.getElementById('score').innerHTML = "Score: " + score;
+    }
     for (const i of lines_to_remove) {
         for(var j = 0; j<10; j++){
             game_grid.rows[i].cells[j].innerHTML = ' ';
