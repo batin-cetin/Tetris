@@ -62,7 +62,7 @@ class L_piece{
     constructor(){
         this.x = 3;
         this.y = 0;
-        this.shape = [['L', 'L', 'L'], ['L', 'L', ' '], [' ', ' ', ' ']];
+        this.shape = [['L', 'L', 'L'], ['L', ' ', ' '], [' ', ' ', ' ']];
         this.color = "orange";
     }
     rotate(){
