@@ -14,7 +14,7 @@ class I_piece{
     constructor(){
         this.x = 3;
         this.y = 0;
-        this.shape = [[' ', ' ', 'I', ' '], [' ', ' ', 'I', ' '], [' ', ' ', 'I', ' '], [' ', ' ', 'I', ' ']];
+        this.shape = [['I', 'I', 'I', 'I'], [' ', ' ', ' ', ' '], [' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ']];
         this.color = "cyan";
     }
     rotate(){
@@ -62,7 +62,7 @@ class L_piece{
     constructor(){
         this.x = 3;
         this.y = 0;
-        this.shape = [[' ', 'L', ' '], [' ', 'L', ' '], [' ', 'L', 'L']];
+        this.shape = [['L', 'L', 'L'], ['L', 'L', ' '], [' ', ' ', ' ']];
         this.color = "orange";
     }
     rotate(){
@@ -74,7 +74,7 @@ class J_piece{
     constructor(){
         this.x = 3;
         this.y = 0;
-        this.shape = [[' ', 'J', ' '], [' ', 'J', ' '], ['J', 'J', ' ']];
+        this.shape = [['J', 'J', 'J'], [' ', ' ', 'J'], [' ', ' ', ' ']];
         this.color = "pink";
     }
     rotate(){
