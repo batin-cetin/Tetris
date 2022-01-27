@@ -44,15 +44,18 @@ function draw_piece(fullness){
     }
 }
 
+var collision_history = [];
 function collision(x, y){
     var current_shape = current_piece.shape;
     for(var i=0; i<current_shape.length; i++){
         for(var j=0; j<current_shape[0].length; j++){
             if ((y+i >= 20 || x+j < 0 || x+j >= 10) && current_shape[i][j] != ' '){
+                if (y+i >= 20 && current_shape[i][j] != ' ') collision_history.push('put');
                 return true;
             }
             if (!(y+i >= 20 || x+j < 0 || x+j >= 10)){
                 if (game_grid.rows[y+i].cells[x+j].innerHTML === 'D' && current_shape[i][j] != ' '){
+                    collision_history.push("put");
                     return true;
                 }
             }
@@ -137,25 +140,6 @@ function put_piece(){
     spawn_piece();
 }
 
-var collision_history = [];
-function collision_2(x, y){
-    var current_shape = current_piece.shape;
-    for(var i=0; i<current_shape.length; i++){
-        for(var j=0; j<current_shape[0].length; j++){
-            if (y+i >= 20 && current_shape[i][j] != ' '){
-                collision_history.push("put");
-                return;
-            }
-            if (!(y+i >= 20 || x+j < 0 || x+j >= 10)){
-                if (game_grid.rows[y+i].cells[x+j].innerHTML === 'D' && current_shape[i][j] != ' '){
-                    collision_history.push("put");
-                    return;
-                }
-            }
-        }
-    }
-}
-
 document.onkeydown = function (event) {
     switch (event.keyCode) {
         case 37: //Left arrow
@@ -187,12 +171,19 @@ setInterval(function() {
 }, 800);
 
 function put_piece_interval(){
+    var x = current_piece.x;
+    var y = current_piece.y;
     if(put_time) clearInterval(put_time);
         var put_time = setInterval(function(){
-            collision_2(current_piece.x, current_piece.y+1);
+            collision(current_piece.x, current_piece.y+1);
     }, 50);
     if(collision_history.length > 15) {
-        put_piece();
+        if (collision(current_piece.x, current_piece.y+1)){
+            put_piece();
+        }
+        else{
+            collision_history = [];
+        }
     }
     collision_history = [];
 }
